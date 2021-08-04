@@ -35,19 +35,24 @@ namespace WebApplication3.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
+            ServiceResponse<Category> response = new ServiceResponse<Category>();
 
-            var item = context.Categories.Find(id);
-            if(item == null)
+            response.Entity = context.Categories.Find(id);
+            if(response.Entity == null)
             {
                 return NotFound();
             }
-            return Ok(item);
+            response.IsSuccessFul = true;
+            return Ok(response);
         }
 
         // POST api/<CategoryController>
         [HttpPost]
         public IActionResult Post([FromBody] CategoryModel model)
         {
+            ServiceResponse<Category> response = new ServiceResponse<Category>();
+
+
             if (ModelState.IsValid)
             {
                 var category = new Category
@@ -63,7 +68,9 @@ namespace WebApplication3.Controllers
             }
             else
             {
-                return BadRequest(ModelState);
+                response.Errors = ModelState.Values.SelectMany(m => m.Errors)
+                    .Select(e => e.ErrorMessage).ToList();
+                return BadRequest(response);
             }
                
             

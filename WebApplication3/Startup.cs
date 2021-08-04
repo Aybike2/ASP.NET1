@@ -28,6 +28,12 @@ namespace WebApplication3
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.Configure<ApiBehaviorOptions>(options => 
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
             services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
                 
