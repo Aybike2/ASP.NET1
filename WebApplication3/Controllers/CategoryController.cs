@@ -23,15 +23,19 @@ namespace WebApplication3.Controllers
 
         // GET: api/<CategoryController>
         [HttpGet]
-        public List<Category> Get()
+        public IActionResult Get()
         {
-            return context.Categories.OrderByDescending(c => c.Id).ToList();
+            ServiceResponse<Category> response = new ServiceResponse<Category>();
+            response.Entities = context.Categories.ToList();
+            response.IsSuccessFul = true;
+            return Ok(response);
         }
 
         // GET api/<CategoryController>/5
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
+
             var item = context.Categories.Find(id);
             if(item == null)
             {
